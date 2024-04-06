@@ -14,8 +14,8 @@ router.get("/:id", findClienteById);
 
 router.post("/", createCliente);
 
-router.patch("/", updateClientes);
+router.patch("/:id", updateClientes);
 
-router.delete("/", deleteCliente);
+router.delete("/:id", deleteCliente);
 
 module.exports = router;
