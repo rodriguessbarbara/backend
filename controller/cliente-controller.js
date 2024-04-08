@@ -3,6 +3,7 @@ const {
 	getClientes,
 	getClientebyId,
 	postCliente,
+	postCheckCliente,
 	updateClientebyId,
 	deleteClientebyId,
 } = require("../services/cliente-service");
@@ -65,11 +66,37 @@ async function createCliente(request, response) {
 				novoCliente.dataNascimento
 			);
 			response.status(201);
-			response.send("cliente atualizado com sucesso");
-			response.send(resultado);
+			response.send("usuário criado com sucesso");
 		} else {
 			response.status(422);
-			response.send("Os campos são obrigatórios");
+			response.send("Todos os campos são obrigatórios");
+		}
+	} catch (err) {
+		response.status(500);
+		response.send("erro: " + err);
+	}
+}
+
+async function checkCliente(request, response) {
+	const verificaCliente = request.body;
+
+	try {
+		console.log("iniciando conexão");
+
+		if (request.body.email && request.body.senha) {
+			const resultado = await postCheckCliente(
+				verificaCliente.email,
+				verificaCliente.senha
+			);
+			if (resultado != undefined) {
+				response.status(201);
+				response.send(resultado.id);
+			} else {
+				response.status(401);
+				response.send("usuário e/ou senha incorreto");
+			}
+		} else {
+			response.status(422);
 		}
 	} catch (err) {
 		response.status(500);
@@ -97,8 +124,7 @@ async function updateClientes(request, response) {
 				atualizadoCliente.dataNascimento
 			);
 			response.status(204);
-			response.send(`cliente atualizado com sucesso, ID: ${id}`);
-			response.send(resultado);
+			response.send("ok");
 		} else {
 			response.status(422);
 			response.send("Id inválido");
@@ -117,7 +143,6 @@ async function deleteCliente(request, response) {
 		if (id && Number(id)) {
 			const resultado = await deleteClientebyId(id);
 			response.send(`cliente excluido com sucesso, ID: ${id}`);
-			response.send(resultado);
 		} else {
 			response.status(422);
 			response.send("Id inválido");
@@ -132,6 +157,7 @@ module.exports = {
 	findClientes,
 	findClienteById,
 	createCliente,
+	checkCliente,
 	updateClientes,
 	deleteCliente,
 };

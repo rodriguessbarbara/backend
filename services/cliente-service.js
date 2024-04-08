@@ -49,10 +49,20 @@ async function postCliente(
 			dataNascimento,
 		];
 		const result = await cliente.query(query, values);
-		console.log("caiu aqui");
 		return result.rows;
 	} catch (error) {
 		throw new Error("Erro ao inserir cliente: " + error.message);
+	}
+}
+
+async function postCheckCliente(email, senha) {
+	try {
+		const query = `SELECT id FROM Clientes WHERE email = $1 AND senha = $2`;
+		const values = [email, senha];
+		const result = await cliente.query(query, values);
+		return result.rows[0];
+	} catch (error) {
+		throw new Error("Erro ao verificar cliente: " + error.message);
 	}
 }
 
@@ -106,6 +116,7 @@ module.exports = {
 	getClientes,
 	getClientebyId,
 	postCliente,
+	postCheckCliente,
 	updateClientebyId,
 	deleteClientebyId,
 };

@@ -3,6 +3,7 @@ const {
 	findClientes,
 	findClienteById,
 	createCliente,
+	checkCliente,
 	updateClientes,
 	deleteCliente,
 } = require("../controller/cliente-controller");
@@ -13,6 +14,7 @@ router.get("/", findClientes);
 router.get("/:id", findClienteById);
 
 router.post("/", createCliente);
+router.post("/login", checkCliente);
 
 router.patch("/:id", updateClientes);
 
