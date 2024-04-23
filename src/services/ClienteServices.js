@@ -26,6 +26,40 @@ class ClienteServices extends Services {
 			throw new Error(err);
 		}
 	}
+
+	async chamaTudoClientes() {
+		try {
+			const clientes = await data.Cliente.findAll({
+				include: [
+					{
+						model: data.Cartao,
+						attributes: [
+							"bandeira",
+							"numeroCartao",
+							"final",
+							"nome",
+							"cvv",
+							"preferencial",
+						],
+					},
+					{
+						model: data.Endereco,
+						attributes: [
+							"lagradouro",
+							"enderecoResidencial",
+							"cidade",
+							"estado",
+							"pais",
+						],
+					},
+				],
+			});
+
+			return clientes;
+		} catch (err) {
+			throw new Error(`Erro ao buscar livros: ${err.message}`);
+		}
+	}
 }
 
 module.exports = ClienteServices;

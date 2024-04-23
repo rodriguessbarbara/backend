@@ -8,8 +8,12 @@ module.exports = (sequelize, DataTypes) => {
 			Livro.belongsToMany(models.Categoria, {
 				through: models.LivroCategoria,
 				foreignKey: "livro_id",
+				onDelete: "CASCADE",
 			});
-			Livro.hasMany(models.LivroCategoria, { foreignKey: "livro_id" });
+			Livro.hasMany(models.LivroCategoria, {
+				foreignKey: "livro_id",
+				onDelete: "CASCADE",
+			});
 		}
 	}
 	Livro.init(

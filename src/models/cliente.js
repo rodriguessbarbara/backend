@@ -3,8 +3,14 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
 	class Cliente extends Model {
 		static associate(models) {
-			Cliente.hasMany(models.Endereco, { foreignKey: "cliente_id" });
-			Cliente.hasMany(models.Cartao, { foreignKey: "cliente_id" });
+			Cliente.hasMany(models.Endereco, {
+				foreignKey: "cliente_id",
+				onDelete: "CASCADE",
+			});
+			Cliente.hasMany(models.Cartao, {
+				foreignKey: "cliente_id",
+				onDelete: "CASCADE",
+			});
 			Cliente.hasMany(models.Pedido, { foreignKey: "cliente_id" });
 			Cliente.hasMany(models.Cupom, { foreignKey: "cliente_id" });
 		}

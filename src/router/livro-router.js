@@ -25,7 +25,7 @@ router.patch("/livros/:id", (request, response) => {
 });
 
 router.delete("/livros/:id", (request, response) => {
-	livroController.deleteLivro(request, response);
+	livroController.deleteEntidade(request, response);
 });
 
 module.exports = router;

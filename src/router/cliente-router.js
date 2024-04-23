@@ -5,7 +5,7 @@ const clienteController = new ClienteController();
 const router = Router();
 
 router.get("/clientes", (request, response) => {
-	clienteController.findTodos(request, response);
+	clienteController.findTudoCliente(request, response);
 });
 
 router.get("/clientes/:id", (request, response) => {
