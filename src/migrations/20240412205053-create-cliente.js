@@ -36,6 +36,26 @@ module.exports = {
 			role: {
 				type: Sequelize.STRING,
 			},
+			endereco_id: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				references: { model: "enderecos", key: "id" },
+			},
+			cartao_id: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				references: { model: "cartoes", key: "id" },
+			},
+			pedido_id: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				references: { model: "pedidos", key: "id" },
+			},
+			cupom_id: {
+				allowNull: false,
+				type: Sequelize.INTEGER,
+				references: { model: "cupons", key: "id" },
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,

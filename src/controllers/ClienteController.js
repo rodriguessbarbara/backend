@@ -26,9 +26,7 @@ class ClienteController extends Controller {
 			if (err.message === "Usuário e/ou senha incorreto") {
 				return response.status(401).send("Usuário e/ou senha incorreto");
 			} else {
-				return response
-					.status(500)
-					.send("Erro ao verificar o cliente: " + err.message);
+				return response.status(500).send(err.message);
 			}
 		}
 	}

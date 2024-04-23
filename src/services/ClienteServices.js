@@ -15,13 +15,15 @@ class ClienteServices extends Services {
 				},
 			});
 
-			if (resultado) {
+			if (resultado && resultado.ativo) {
 				return resultado.id;
-			} else {
+			} else if (!resultado) {
 				throw new Error("Usuário e/ou senha incorreto");
+			} else {
+				throw new Error("Sua conta está inativa");
 			}
 		} catch (err) {
-			throw new Error("Erro ao verificar o cliente: " + err);
+			throw new Error(err);
 		}
 	}
 }

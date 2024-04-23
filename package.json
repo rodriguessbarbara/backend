@@ -23,6 +23,7 @@
 		"nodemon": "^3.1.0",
 		"pg": "8.11.5",
 		"sequelize": "6.32.1",
-		"sequelize-cli": "6.6.1"
+		"sequelize-cli": "6.6.1",
+		"unidecode": "^1.0.1"
 	}
 }
