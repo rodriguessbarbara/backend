@@ -21,13 +21,8 @@ module.exports = {
 			ativo: {
 				type: Sequelize.BOOLEAN,
 			},
-			cliente_id: {
-				allowNull: false,
-				type: Sequelize.INTEGER,
-				references: { model: "clientes", key: "id" },
-			},
 			pedido_id: {
-				allowNull: false,
+				allowNull: true,
 				type: Sequelize.INTEGER,
 				references: { model: "pedidos", key: "id" },
 			},

@@ -39,12 +39,12 @@ module.exports = {
 				references: { model: "clientes", key: "id" },
 			},
 			cartao_id: {
-				allowNull: false,
+				allowNull: true,
 				type: Sequelize.INTEGER,
 				references: { model: "cartoes", key: "id" },
 			},
 			cupom_id: {
-				allowNull: false,
+				allowNull: true,
 				type: Sequelize.INTEGER,
 				references: { model: "cupons", key: "id" },
 			},

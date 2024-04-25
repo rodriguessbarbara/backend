@@ -5,11 +5,6 @@ const Categoria = require("./categoria");
 module.exports = (sequelize, DataTypes) => {
 	class Livro extends Model {
 		static associate(models) {
-			Livro.belongsToMany(models.Categoria, {
-				through: models.LivroCategoria,
-				foreignKey: "livro_id",
-				onDelete: "CASCADE",
-			});
 			Livro.hasMany(models.LivroCategoria, {
 				foreignKey: "livro_id",
 				onDelete: "CASCADE",

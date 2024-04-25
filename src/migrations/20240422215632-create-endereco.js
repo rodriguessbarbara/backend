@@ -16,7 +16,7 @@ module.exports = {
 				type: Sequelize.STRING,
 			},
 			tipoResidencia: {
-				type: Sequelize.STRING,
+				type: Sequelize.ENUM("Casa", "Apartamento", "Comercial"),
 			},
 			num: {
 				type: Sequelize.STRING,
@@ -40,6 +40,7 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.INTEGER,
 				references: { model: "clientes", key: "id" },
+				onDelete: "CASCADE",
 			},
 			createdAt: {
 				allowNull: false,

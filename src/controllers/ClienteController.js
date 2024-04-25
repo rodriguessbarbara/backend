@@ -43,6 +43,19 @@ class ClienteController extends Controller {
 		}
 	}
 
+	async findTudoClienteById(request, response) {
+		try {
+			const id = request.params.id;
+			const clientes = await clienteServices.chamaTudoClienteById(id);
+			if (!clientes.length) {
+				return response.status(404).send("Nenhum cliente encontrado.");
+			}
+			return response.status(200).json(clientes);
+		} catch (err) {
+			return response.status(500).json(err.message);
+		}
+	}
+
 	//criar um CRUD que tenha informações do Cartao e Endereco
 }
 

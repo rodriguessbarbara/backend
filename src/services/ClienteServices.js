@@ -47,6 +47,10 @@ class ClienteServices extends Services {
 						attributes: [
 							"lagradouro",
 							"enderecoResidencial",
+							"tipoResidencia",
+							"num",
+							"CEP",
+							"bairro",
 							"cidade",
 							"estado",
 							"pais",
@@ -58,6 +62,46 @@ class ClienteServices extends Services {
 			return clientes;
 		} catch (err) {
 			throw new Error(`Erro ao buscar livros: ${err.message}`);
+		}
+	}
+
+	async chamaTudoClienteById(userId) {
+		try {
+			const clientes = await data.Cliente.findAll({
+				where: {
+					id: userId,
+				},
+				include: [
+					{
+						model: data.Cartao,
+						attributes: [
+							"bandeira",
+							"numeroCartao",
+							"final",
+							"nome",
+							"cvv",
+							"preferencial",
+						],
+					},
+					{
+						model: data.Endereco,
+						attributes: [
+							"lagradouro",
+							"enderecoResidencial",
+							"tipoResidencia",
+							"num",
+							"CEP",
+							"bairro",
+							"cidade",
+							"estado",
+							"pais",
+						],
+					},
+				],
+			});
+			return clientes;
+		} catch (err) {
+			throw new Error(`Erro ao buscar cliente: ${err.message}`);
 		}
 	}
 }

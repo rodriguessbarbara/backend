@@ -4,8 +4,8 @@ module.exports = (sequelize, DataTypes) => {
 	class Pedido extends Model {
 		static associate(models) {
 			Pedido.belongsTo(models.Cliente, { foreignKey: "cliente_id" });
-			Pedido.hasMany(models.Cartao, { foreignKey: "pedido_id" });
-			Pedido.hasOne(models.Cupom, { foreignKey: "cupom_id" });
+			Pedido.belongsTo(models.Cupom, { foreignKey: "cupom_id" });
+			Pedido.belongsTo(models.Cartao, { foreignKey: "cartao_id" });
 		}
 	}
 	Pedido.init(
@@ -26,6 +26,9 @@ module.exports = (sequelize, DataTypes) => {
 					"TROCA AUTORIZADA"
 				),
 			},
+			cliente_id: DataTypes.INTEGER,
+			cupom_id: DataTypes.INTEGER,
+			cartao_id: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

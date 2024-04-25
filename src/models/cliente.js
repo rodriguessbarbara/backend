@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
 				onDelete: "CASCADE",
 			});
 			Cliente.hasMany(models.Pedido, { foreignKey: "cliente_id" });
-			Cliente.hasMany(models.Cupom, { foreignKey: "cliente_id" });
 		}
 	}
 	Cliente.init(

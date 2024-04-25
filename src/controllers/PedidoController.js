@@ -1,11 +1,11 @@
 const Controller = require("./Controller");
-const PedidoController = require("../services/PedidoServices");
+const PedidoServices = require("../services/PedidoServices");
 
-const pedidoController = new PedidoController();
+const pedidoServices = new PedidoServices();
 
 class PedidoController extends Controller {
 	constructor() {
-		super(pedidoController);
+		super(pedidoServices);
 	}
 }
 

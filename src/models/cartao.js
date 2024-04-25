@@ -7,8 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: "cliente_id",
 				onDelete: "CASCADE",
 			});
-			Cartao.belongsToMany(models.Pedido, {
-				through: "cartao_pedido",
+			Cartao.hasMany(models.Pedido, {
 				foreignKey: "cartao_id",
 			});
 		}
@@ -21,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
 			nome: DataTypes.STRING,
 			cvv: DataTypes.STRING,
 			preferencial: DataTypes.BOOLEAN,
+			cliente_id: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

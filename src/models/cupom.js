@@ -2,17 +2,7 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
 	class Cupom extends Model {
-		static associate(models) {
-			Cupom.belongsToMany(models.Cliente, {
-				through: "cupom_cliente",
-				foreignKey: "cliente_id",
-			});
-
-			Cupom.belongsToMany(models.Pedido, {
-				through: "cupom_pedido",
-				foreignKey: "pedido_id",
-			});
-		}
+		static associate(models) {}
 	}
 	Cupom.init(
 		{

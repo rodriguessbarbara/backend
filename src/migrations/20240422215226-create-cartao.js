@@ -33,11 +33,6 @@ module.exports = {
 				references: { model: "clientes", key: "id" },
 				onDelete: "CASCADE",
 			},
-			pedido_id: {
-				allowNull: false,
-				type: Sequelize.INTEGER,
-				references: { model: "pedidos", key: "id" },
-			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,

@@ -13,6 +13,7 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.INTEGER,
 				references: { model: "livros", key: "id" },
+				onDelete: "CASCADE",
 			},
 			categoria_id: {
 				allowNull: false,
