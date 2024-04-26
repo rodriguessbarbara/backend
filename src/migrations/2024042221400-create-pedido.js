@@ -37,6 +37,7 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.INTEGER,
 				references: { model: "clientes", key: "id" },
+				onDelete: "CASCADE",
 			},
 			cartao_id: {
 				allowNull: true,

@@ -34,6 +34,7 @@ class ClienteServices extends Services {
 					{
 						model: data.Cartao,
 						attributes: [
+							"id",
 							"bandeira",
 							"numeroCartao",
 							"final",
@@ -45,6 +46,7 @@ class ClienteServices extends Services {
 					{
 						model: data.Endereco,
 						attributes: [
+							"id",
 							"lagradouro",
 							"enderecoResidencial",
 							"tipoResidencia",
@@ -54,6 +56,19 @@ class ClienteServices extends Services {
 							"cidade",
 							"estado",
 							"pais",
+						],
+					},
+					{
+						model: data.Pedido,
+						attributes: [
+							"id",
+							"tituloLivro",
+							"formaPagamento",
+							"valor",
+							"quantidade",
+							"status",
+							"cupom_id",
+							"cartao_id",
 						],
 					},
 				],
@@ -67,7 +82,7 @@ class ClienteServices extends Services {
 
 	async chamaTudoClienteById(userId) {
 		try {
-			const clientes = await data.Cliente.findAll({
+			const cliente = await data.Cliente.findOne({
 				where: {
 					id: userId,
 				},
@@ -75,6 +90,7 @@ class ClienteServices extends Services {
 					{
 						model: data.Cartao,
 						attributes: [
+							"id",
 							"bandeira",
 							"numeroCartao",
 							"final",
@@ -86,6 +102,7 @@ class ClienteServices extends Services {
 					{
 						model: data.Endereco,
 						attributes: [
+							"id",
 							"lagradouro",
 							"enderecoResidencial",
 							"tipoResidencia",
@@ -97,9 +114,22 @@ class ClienteServices extends Services {
 							"pais",
 						],
 					},
+					{
+						model: data.Pedido,
+						attributes: [
+							"id",
+							"tituloLivro",
+							"formaPagamento",
+							"valor",
+							"quantidade",
+							"status",
+							"cupom_id",
+							"cartao_id",
+						],
+					},
 				],
 			});
-			return clientes;
+			return cliente;
 		} catch (err) {
 			throw new Error(`Erro ao buscar cliente: ${err.message}`);
 		}

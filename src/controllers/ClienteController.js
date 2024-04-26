@@ -47,7 +47,7 @@ class ClienteController extends Controller {
 		try {
 			const id = request.params.id;
 			const clientes = await clienteServices.chamaTudoClienteById(id);
-			if (!clientes.length) {
+			if (!clientes) {
 				return response.status(404).send("Nenhum cliente encontrado.");
 			}
 			return response.status(200).json(clientes);
