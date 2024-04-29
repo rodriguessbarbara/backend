@@ -30,7 +30,8 @@ module.exports = {
 					"EM TRANSPORTE",
 					"ENTREGUE",
 					"EM TROCA",
-					"TROCA AUTORIZADA"
+					"TROCA AUTORIZADA",
+					"TROCA FINALIZADA"
 				),
 			},
 			cliente_id: {

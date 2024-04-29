@@ -26,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
 					"EM TRANSPORTE",
 					"ENTREGUE",
 					"EM TROCA",
-					"TROCA AUTORIZADA"
+					"TROCA AUTORIZADA",
+					"TROCA FINALIZADA"
 				),
 			},
 			cliente_id: DataTypes.INTEGER,
