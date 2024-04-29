@@ -6,26 +6,23 @@ class CupomServices extends Services {
 		super("Cupom");
 	}
 
-	async verificaCupom(codigo) {
+	async verificaCupom(nome) {
 		try {
 			const resultado = await data.Cupom.findOne({
-				where: { codigo: codigo },
+				where: { nome: nome },
 			});
 
 			if (resultado) {
 				if (resultado.ativo) {
-					return resultado.id;
-				}
-				else {
+					return resultado;
+				} else {
 					throw new Error("Código não ativo");
 				}
-			}
-			else {
+			} else {
 				throw new Error("Código inválido");
 			}
-		}
-		catch (error) {
-			throw new Error("Erro ao verificar o cupom: " + err);
+		} catch (err) {
+			throw new Error(err);
 		}
 	}
 }

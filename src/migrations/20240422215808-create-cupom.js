@@ -11,15 +11,19 @@ module.exports = {
 			},
 			nome: {
 				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			valor: {
 				type: Sequelize.FLOAT,
+				allowNull: false,
 			},
 			tipo: {
 				type: Sequelize.STRING,
+				allowNull: false,
 			},
 			ativo: {
 				type: Sequelize.BOOLEAN,
+				allowNull: false,
 			},
 			pedido_id: {
 				allowNull: true,

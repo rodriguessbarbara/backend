@@ -12,8 +12,8 @@ class CupomController extends Controller {
 		const dataCupom = request.body;
 
 		try {
-			if (request.body.cupom) {
-				const resultado = await cupomServices.verificaCupom(dataCupom.codigo);
+			if (request.body) {
+				const resultado = await cupomServices.verificaCupom(dataCupom.nome);
 
 				return response.status(201).json(resultado);
 			} else {
@@ -26,9 +26,7 @@ class CupomController extends Controller {
 			if (error.message === "Código inválido") {
 				return response.send("Código inválido");
 			}
-			return response
-				.status(500)
-				.send("Erro ao verificar o cupom: " + error.message);
+			return response.status(500).send(error.message);
 		}
 	}
 }
