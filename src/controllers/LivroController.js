@@ -9,6 +9,16 @@ class LivroController extends Controller {
 		super(livroServices);
 	}
 
+	async criarLivro(request, response) {
+		try {
+			const novoLivro = request.body;
+			const livroCriado = await livroServices.createLivro(novoLivro);
+			response.status(201).json(livroCriado);
+		} catch (error) {
+			response.status(400).json(error.message);
+		}
+	}
+
 	async findLivrosByNome(request, response) {
 		try {
 			const nome = unidecode(request.params.nome.toLowerCase());

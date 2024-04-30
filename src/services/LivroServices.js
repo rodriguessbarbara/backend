@@ -7,6 +7,26 @@ class LivroServices extends Services {
 		super("Livro");
 	}
 
+	async createLivro(novoLivro) {
+		try {
+			const livroCriado = await data.Livro.create(novoLivro);
+			console.log(novoLivro);
+			if (novoLivro.categorias && novoLivro.categorias.length > 0) {
+				await Promise.all(
+					novoLivro.categorias.map(async (categoria_id) => {
+						await data.LivroCategoria.create({
+							livro_id: livroCriado.id,
+							categoria_id: categoria_id,
+						});
+					})
+				);
+			}
+			return livroCriado;
+		} catch (err) {
+			throw new Error(`Erro ao criar o livro: ${err.message}`);
+		}
+	}
+
 	async getByNome(nome) {
 		try {
 			const livro = await data.Livro.findAll({

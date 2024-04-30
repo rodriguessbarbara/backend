@@ -17,7 +17,7 @@ router.get("/livros/nome/:nome", (request, response) => {
 });
 
 router.post("/livros", (request, response) => {
-	livroController.createEntidade(request, response);
+	livroController.criarLivro(request, response);
 });
 
 router.patch("/livros/:id", (request, response) => {
