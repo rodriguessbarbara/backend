@@ -68,7 +68,6 @@ class ClienteServices extends Services {
 							"quantidade",
 							"status",
 							"cupom_id",
-							"cartao_id",
 						],
 					},
 				],
@@ -76,7 +75,7 @@ class ClienteServices extends Services {
 
 			return clientes;
 		} catch (err) {
-			throw new Error(`Erro ao buscar livros: ${err.message}`);
+			throw new Error(`Erro ao buscar clientes: ${err.message}`);
 		}
 	}
 
@@ -124,7 +123,6 @@ class ClienteServices extends Services {
 							"quantidade",
 							"status",
 							"cupom_id",
-							"cartao_id",
 						],
 					},
 				],
