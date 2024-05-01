@@ -6,6 +6,88 @@ class PedidoServices extends Services {
 		super("Pedido");
 	}
 
+	async createPedido(novoPedido) {
+		try {
+			const pedidoCriado = await data.Pedido.create(novoPedido);
+			if (novoPedido.cartoes && novoPedido.cartoes.length > 0) {
+				await Promise.all(
+					novoPedido.cartoes.map(async (cartao_id) => {
+						await data.Cartao_Pedido.create({
+							pedido_id: pedidoCriado.id,
+							cartao_id: cartao_id,
+						});
+					})
+				);
+			}
+			return pedidoCriado;
+		} catch (err) {
+			throw new Error(`Erro ao criar o pedido: ${err.message}`);
+		}
+	}
+
+	async getPedidosById(id) {
+		try {
+			const pedidos = await data.Pedido.findOne({
+				where: {
+					id: id,
+				},
+				include: [
+					{
+						model: data.Cartao_Pedido,
+						attributes: ["cartao_id"],
+						include: [
+							{
+								model: data.Cartao,
+								attributes: [
+									"id",
+									"bandeira",
+									"numeroCartao",
+									"final",
+									"nome",
+									"cvv",
+									"preferencial",
+								],
+							},
+						],
+					},
+				],
+			});
+			return pedidos;
+		} catch (err) {
+			throw new Error(`Erro ao buscar pedidos: ${err.message}`);
+		}
+	}
+
+	async getTodosPedidos() {
+		try {
+			const pedidos = await data.Pedido.findAll({
+				include: [
+					{
+						model: data.Cartao_Pedido,
+						attributes: ["cartao_id"],
+						include: [
+							{
+								model: data.Cartao,
+								attributes: [
+									"id",
+									"bandeira",
+									"numeroCartao",
+									"final",
+									"nome",
+									"cvv",
+									"preferencial",
+								],
+							},
+						],
+					},
+				],
+			});
+			return pedidos;
+		} catch (err) {
+			throw new Error(`Erro ao buscar pedidos: ${err.message}`);
+		}
+	}
+
 	async confirmarPedido(vendaId, statusAtual) {
 		try {
 			const pedido = await data.Pedido.findByPk(vendaId);

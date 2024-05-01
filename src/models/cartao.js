@@ -7,8 +7,12 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: "cliente_id",
 				onDelete: "CASCADE",
 			});
-			Cartao.hasMany(models.Pedido, {
+			// Cartao.hasMany(models.Pedido, {
+			// 	foreignKey: "cartao_id",
+			// });
+			Cartao.hasMany(models.Cartao_Pedido, {
 				foreignKey: "cartao_id",
+				onDelete: "CASCADE",
 			});
 		}
 	}

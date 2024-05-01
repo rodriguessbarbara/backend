@@ -8,6 +8,35 @@ class PedidoController extends Controller {
 		super(pedidoServices);
 	}
 
+	async criarPedido(request, response) {
+		try {
+			const novoPedido = request.body;
+			const pedidoCriado = await pedidoServices.createPedido(novoPedido);
+			response.status(201).json(pedidoCriado);
+		} catch (error) {
+			response.status(400).json(error.message);
+		}
+	}
+
+	async findPedidosById(request, response) {
+		try {
+			const id = request.params.id;
+			const pedidos = await pedidoServices.getPedidosById(id);
+			return response.status(201).json(pedidos);
+		} catch (err) {
+			return response.status(500).json(err.message);
+		}
+	}
+
+	async findTodosPedidos(request, response) {
+		try {
+			const pedidos = await pedidoServices.getTodosPedidos();
+			return response.status(200).json(pedidos);
+		} catch (err) {
+			return response.status(500).json(err.message);
+		}
+	}
+
 	async confirmarPedido(request, response) {
 		try {
 			const vendaId = request.params.id;

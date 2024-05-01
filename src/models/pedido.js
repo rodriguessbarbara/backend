@@ -8,7 +8,11 @@ module.exports = (sequelize, DataTypes) => {
 				onDelete: "CASCADE",
 			});
 			Pedido.belongsTo(models.Cupom, { foreignKey: "cupom_id" });
-			Pedido.belongsTo(models.Cartao, { foreignKey: "cartao_id" });
+			// Pedido.belongsTo(models.Cartao, { foreignKey: "cartao_id" });
+			Pedido.hasMany(models.Cartao_Pedido, {
+				foreignKey: "pedido_id",
+				onDelete: "CASCADE",
+			});
 		}
 	}
 	Pedido.init(
@@ -32,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
 			},
 			cliente_id: DataTypes.INTEGER,
 			cupom_id: DataTypes.INTEGER,
-			cartao_id: DataTypes.INTEGER,
+			// cartao_id: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

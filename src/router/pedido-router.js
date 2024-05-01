@@ -6,13 +6,13 @@ const router = Router();
 
 //CRUD
 router.post("/pedidos", (request, response) => {
-	pedidoController.createEntidade(request, response);
+	pedidoController.criarPedido(request, response);
 });
 router.get("/pedidos", (request, response) => {
-	pedidoController.findTodos(request, response);
+	pedidoController.findTodosPedidos(request, response);
 });
 router.get("/pedidos/:id", (request, response) => {
-	pedidoController.findEntidadeById(request, response);
+	pedidoController.findPedidosById(request, response);
 });
 router.delete("/pedidos/:id", (request, response) => {
 	pedidoController.deleteEntidade(request, response);

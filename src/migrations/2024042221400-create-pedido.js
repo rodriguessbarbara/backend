@@ -40,11 +40,11 @@ module.exports = {
 				references: { model: "clientes", key: "id" },
 				onDelete: "CASCADE",
 			},
-			cartao_id: {
-				allowNull: true,
-				type: Sequelize.INTEGER,
-				references: { model: "cartoes", key: "id" },
-			},
+			// cartao_id: {
+			// 	allowNull: true,
+			// 	type: Sequelize.INTEGER,
+			// 	references: { model: "cartoes", key: "id" },
+			// },
 			cupom_id: {
 				allowNull: true,
 				type: Sequelize.INTEGER,
