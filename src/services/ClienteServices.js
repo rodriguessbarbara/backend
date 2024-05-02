@@ -124,6 +124,26 @@ class ClienteServices extends Services {
 							"status",
 							"cupom_id",
 						],
+						include: [
+							{
+								model: data.Cartao_Pedido,
+								attributes: ["cartao_id"],
+								include: [
+									{
+										model: data.Cartao,
+										attributes: [
+											"id",
+											"bandeira",
+											"numeroCartao",
+											"final",
+											"nome",
+											"cvv",
+											"preferencial",
+										],
+									},
+								],
+							},
+						],
 					},
 				],
 			});

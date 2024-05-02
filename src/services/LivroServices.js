@@ -35,6 +35,18 @@ class LivroServices extends Services {
 						[Op.startsWith]: `%${nome}%`,
 					},
 				},
+				include: [
+					{
+						model: data.LivroCategoria,
+						attributes: ["categoria_id"],
+						include: [
+							{
+								model: data.Categoria,
+								attributes: ["nome"],
+							},
+						],
+					},
+				],
 			});
 			return livro;
 		} catch (err) {
