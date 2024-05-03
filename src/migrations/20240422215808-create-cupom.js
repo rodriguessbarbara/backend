@@ -18,7 +18,7 @@ module.exports = {
 				allowNull: false,
 			},
 			tipo: {
-				type: Sequelize.STRING,
+				type: Sequelize.ENUM("PROMOCIONAL", "TROCA", "DEVOLUÇÃO"),
 				allowNull: false,
 			},
 			ativo: {
@@ -29,6 +29,11 @@ module.exports = {
 				allowNull: true,
 				type: Sequelize.INTEGER,
 				references: { model: "pedidos", key: "id" },
+			},
+			cliente_id: {
+				allowNull: true,
+				type: Sequelize.INTEGER,
+				references: { model: "clientes", key: "id" },
 			},
 			createdAt: {
 				allowNull: false,

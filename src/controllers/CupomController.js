@@ -12,13 +12,18 @@ class CupomController extends Controller {
 		const dataCupom = request.body;
 
 		try {
-			if (request.body) {
-				const resultado = await cupomServices.verificaCupom(dataCupom.nome);
-
-				return response.status(201).json(resultado);
-			} else {
-				response.status(422);
+			if (!dataCupom) {
+				return response.status(422).send("Dados incompletos");
 			}
+			const resultado = await cupomServices.verificaCupom(dataCupom.nome);
+			if (resultado.tipo === "TROCA" || resultado.tipo === "DEVOLUÇÃO") {
+				const clienteId = request.body.cliente_id;
+				if (resultado.cliente_id != clienteId) {
+					return response.status(422).send("Cupom inválido");
+				}
+			}
+
+			return response.status(201).json(resultado);
 		} catch (error) {
 			if (error.message === "Código não ativo") {
 				return response.send("Código não ativo");
