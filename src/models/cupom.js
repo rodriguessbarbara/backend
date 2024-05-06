@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
 				through: "cupom_cliente",
 				foreignKey: "cliente_id",
 			});
-			// Cupom.belongsTo(models.Pedido, {
-			// 	through: "cupom_pedido",
-			// 	foreignKey: "pedido_id",
-			// });
+			Cupom.belongsTo(models.Pedido, {
+				through: "cupom_pedido",
+				foreignKey: "pedido_id",
+			});
 		}
 	}
 	Cupom.init(
@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
 			tipo: DataTypes.ENUM("PROMOCIONAL", "TROCA", "DEVOLUÇÃO"),
 			ativo: DataTypes.BOOLEAN,
 			cliente_id: DataTypes.INTEGER,
+			pedido_id: DataTypes.INTEGER,
 		},
 		{
 			sequelize,

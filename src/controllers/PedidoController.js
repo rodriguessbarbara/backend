@@ -95,7 +95,12 @@ class PedidoController extends Controller {
 	async confirmarRecebimento(request, response) {
 		try {
 			const vendaId = request.params.id;
-			const pedido = await pedidoServices.confirmarRecebimento(vendaId);
+			const cupomId = request.body.id;
+
+			const pedido = await pedidoServices.confirmarRecebimento(
+				vendaId,
+				cupomId
+			);
 			response.status(200).json(pedido);
 		} catch (error) {
 			response.status(500).json(error.message);

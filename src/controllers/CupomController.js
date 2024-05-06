@@ -34,6 +34,23 @@ class CupomController extends Controller {
 			return response.status(500).send(error.message);
 		}
 	}
+
+	async findCuponsByPedidoId(request, response) {
+		const pedidoId = request.params.pedidoId;
+
+		try {
+			if (pedidoId && Number(pedidoId)) {
+				const resultado = await cupomServices.getCuponsByPedidoId(pedidoId);
+				return response.status(201).json(resultado);
+			} else {
+				response.status(422);
+				response.send("Id inválido");
+			}
+		} catch (err) {
+			response.status(500);
+			response.send("erro: " + err);
+		}
+	}
 }
 
 module.exports = CupomController;

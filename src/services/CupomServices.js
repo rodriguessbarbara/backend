@@ -25,6 +25,17 @@ class CupomServices extends Services {
 			throw new Error(err);
 		}
 	}
+
+	async getCuponsByPedidoId(pedidoId) {
+		try {
+			const cupons = await data.Cupom.findAll({
+				where: { pedido_id: pedidoId },
+			});
+			return cupons;
+		} catch (err) {
+			throw new Error(`Erro ao buscar cupons: ${err.message}`);
+		}
+	}
 }
 
 module.exports = CupomServices;

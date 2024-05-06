@@ -114,7 +114,7 @@ class PedidoServices extends Services {
 			if (!pedido) {
 				throw new Error("Pedido não encontrado");
 			}
-			pedido.status = "EM TRÂNSITO";
+			pedido.status = "EM TRANSPORTE";
 			await pedido.save();
 			return pedido;
 		} catch (error) {
@@ -164,13 +164,15 @@ class PedidoServices extends Services {
 		}
 	}
 
-	async confirmarRecebimento(vendaId) {
+	async confirmarRecebimento(vendaId, cupomId) {
 		try {
 			const pedido = await data.Pedido.findByPk(vendaId);
 			if (!pedido || pedido.status.toUpperCase() !== "TROCA AUTORIZADA") {
 				throw new Error("Pedido não encontrado");
 			}
+
 			pedido.status = "TROCA FINALIZADA";
+
 			await pedido.save();
 			return pedido;
 		} catch (error) {
