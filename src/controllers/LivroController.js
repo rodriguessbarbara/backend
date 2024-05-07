@@ -59,6 +59,16 @@ class LivroController extends Controller {
 			return response.status(500).json(err.message);
 		}
 	}
+
+	async findFiltros(request, response) {
+		try {
+			const filtros = await livroServices.getFiltros();
+			response.json(filtros);
+		} catch (err) {
+			console.error(err);
+			response.status(500).json(err.message);
+		}
+	}
 }
 
 module.exports = LivroController;

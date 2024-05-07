@@ -28,4 +28,8 @@ router.delete("/livros/:id", (request, response) => {
 	livroController.deleteEntidade(request, response);
 });
 
+router.get("/filtros", (request, response) => {
+	livroController.findFiltros(request, response);
+});
+
 module.exports = router;
