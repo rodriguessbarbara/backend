@@ -22,6 +22,12 @@ router.delete("/pedidos/:id", (request, response) => {
 router.patch("/pedidos/confirmar/:id", (request, response) => {
 	pedidoController.confirmarPedido(request, response);
 });
+router.patch("/pedidos/recusar/:id", (request, response) => {
+	pedidoController.recusarPedido(request, response);
+});
+router.patch("/pedidos/cancelar/:id", (request, response) => {
+	pedidoController.cancelarPedido(request, response);
+});
 router.patch("/pedidos/despachar/:id", (request, response) => {
 	pedidoController.despacharProdutos(request, response);
 });
@@ -30,6 +36,12 @@ router.patch("/pedidos/confirmar-entrega/:id", (request, response) => {
 });
 router.patch("/pedidos/autorizar-troca/:id", (request, response) => {
 	pedidoController.autorizarTroca(request, response);
+});
+router.patch("/pedidos/recusar-troca/:id", (request, response) => {
+	pedidoController.recusarTroca(request, response);
+});
+router.patch("/pedidos/enviar-itens/:id", (request, response) => {
+	pedidoController.enviarItens(request, response);
 });
 router.patch("/pedidos/confirmar-recebimento/:id", (request, response) => {
 	pedidoController.confirmarRecebimento(request, response);

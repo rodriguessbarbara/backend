@@ -31,7 +31,9 @@ module.exports = {
 					"ENTREGUE",
 					"EM TROCA",
 					"TROCA AUTORIZADA",
-					"TROCA FINALIZADA"
+					"TROCA RECUSADA",
+					"TROCA FINALIZADA",
+					"ITENS ENVIADOS"
 				),
 			},
 			cliente_id: {

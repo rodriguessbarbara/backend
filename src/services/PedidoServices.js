@@ -88,23 +88,48 @@ class PedidoServices extends Services {
 		}
 	}
 
-	async confirmarPedido(vendaId, statusAtual) {
+	async confirmarPedido(vendaId) {
 		try {
 			const pedido = await data.Pedido.findByPk(vendaId);
 			if (!pedido) {
 				throw new Error("Pedido não encontrado");
 			}
-			if (statusAtual === "confirmado") {
-				pedido.status = "PAGAMENTO REALIZADO";
-			} else if (statusAtual === "recusado") {
-				pedido.status = "PAGAMENTO RECUSADO";
-			} else if (statusAtual === "cancelado") {
-				pedido.status = "PEDIDO CANCELADO";
-			}
+			pedido.status = "PAGAMENTO REALIZADO";
+
 			await pedido.save();
-			return pedido.status;
+			return pedido;
 		} catch (error) {
-			throw new Error("Erro ao confirmar pedido: " + error.message);
+			throw new Error("Erro ao confirmar pagamento e pedido: " + error.message);
+		}
+	}
+
+	async recusarPedido(vendaId) {
+		try {
+			const pedido = await data.Pedido.findByPk(vendaId);
+			if (!pedido) {
+				throw new Error("Pedido não encontrado");
+			}
+			pedido.status = "PAGAMENTO RECUSADO";
+
+			await pedido.save();
+			return pedido;
+		} catch (error) {
+			throw new Error("Erro ao recusar pagamento: " + error.message);
+		}
+	}
+
+	async cancelarPedido(vendaId) {
+		try {
+			const pedido = await data.Pedido.findByPk(vendaId);
+			if (!pedido) {
+				throw new Error("Pedido não encontrado");
+			}
+			pedido.status = "PEDIDO CANCELADO";
+
+			await pedido.save();
+			return pedido;
+		} catch (error) {
+			throw new Error("Erro ao cancelar pedido: " + error.message);
 		}
 	}
 
@@ -150,6 +175,20 @@ class PedidoServices extends Services {
 		}
 	}
 
+	async recusarTroca(vendaId) {
+		try {
+			const pedido = await data.Pedido.findByPk(vendaId);
+			if (!pedido || pedido.status.toUpperCase() !== "EM TROCA") {
+				throw new Error("Pedido não encontrado ou não está em troca");
+			}
+			pedido.status = "TROCA RECUSADA";
+			await pedido.save();
+			return pedido;
+		} catch (error) {
+			throw new Error("Erro ao recusar a troca: " + error.message);
+		}
+	}
+
 	async solicitarTroca(vendaId) {
 		try {
 			const pedido = await data.Pedido.findByPk(vendaId);
@@ -164,10 +203,24 @@ class PedidoServices extends Services {
 		}
 	}
 
-	async confirmarRecebimento(vendaId, cupomId) {
+	async enviarItens(vendaId) {
 		try {
 			const pedido = await data.Pedido.findByPk(vendaId);
 			if (!pedido || pedido.status.toUpperCase() !== "TROCA AUTORIZADA") {
+				throw new Error("Pedido não encontrado");
+			}
+			pedido.status = "ITENS ENVIADOS";
+			await pedido.save();
+			return pedido;
+		} catch (error) {
+			throw new Error("Erro ao alterar status - Enviar itens:" + error.message);
+		}
+	}
+
+	async confirmarRecebimento(vendaId, cupomId) {
+		try {
+			const pedido = await data.Pedido.findByPk(vendaId);
+			if (!pedido || pedido.status.toUpperCase() !== "ITENS ENVIADOS") {
 				throw new Error("Pedido não encontrado");
 			}
 

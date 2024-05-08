@@ -40,12 +40,27 @@ class PedidoController extends Controller {
 	async confirmarPedido(request, response) {
 		try {
 			const vendaId = request.params.id;
-			const statusAtual = request.body;
+			const pedido = await pedidoServices.confirmarPedido(vendaId);
+			response.status(200).json(pedido);
+		} catch (error) {
+			response.status(500).json(error.message);
+		}
+	}
 
-			const pedido = await pedidoServices.confirmarPedido(
-				vendaId,
-				statusAtual.status
-			);
+	async recusarPedido(request, response) {
+		try {
+			const vendaId = request.params.id;
+			const pedido = await pedidoServices.recusarPedido(vendaId);
+			response.status(200).json(pedido);
+		} catch (error) {
+			response.status(500).json(error.message);
+		}
+	}
+
+	async cancelarPedido(request, response) {
+		try {
+			const vendaId = request.params.id;
+			const pedido = await pedidoServices.cancelarPedido(vendaId);
 			response.status(200).json(pedido);
 		} catch (error) {
 			response.status(500).json(error.message);
@@ -82,10 +97,30 @@ class PedidoController extends Controller {
 		}
 	}
 
+	async recusarTroca(request, response) {
+		try {
+			const vendaId = request.params.id;
+			const pedido = await pedidoServices.recusarTroca(vendaId);
+			response.status(200).json(pedido);
+		} catch (error) {
+			response.status(500).json(error.message);
+		}
+	}
+
 	async solicitarTroca(request, response) {
 		try {
 			const vendaId = request.params.id;
 			const pedido = await pedidoServices.solicitarTroca(vendaId);
+			response.status(200).json(pedido);
+		} catch (error) {
+			response.status(500).json(error.message);
+		}
+	}
+
+	async enviarItens(request, response) {
+		try {
+			const vendaId = request.params.id;
+			const pedido = await pedidoServices.enviarItens(vendaId);
 			response.status(200).json(pedido);
 		} catch (error) {
 			response.status(500).json(error.message);
