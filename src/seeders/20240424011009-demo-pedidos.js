@@ -5,7 +5,6 @@ module.exports = {
 	async up(queryInterface, Sequelize) {
 		await queryInterface.bulkInsert("pedidos", [
 			{
-				tituloLivro: ["o impulso"],
 				formaPagamento: "Cartao",
 				valor: 25.5,
 				quantidade: "2",
@@ -15,7 +14,6 @@ module.exports = {
 				updatedAt: new Date(),
 			},
 			{
-				tituloLivro: ["vespera", "violeta"],
 				formaPagamento: "Cartao",
 				valor: 52.5,
 				quantidade: "2",

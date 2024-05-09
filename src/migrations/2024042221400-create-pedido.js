@@ -9,9 +9,6 @@ module.exports = {
 				primaryKey: true,
 				type: Sequelize.INTEGER,
 			},
-			tituloLivro: {
-				type: Sequelize.STRING,
-			},
 			formaPagamento: {
 				type: Sequelize.STRING,
 			},
@@ -19,7 +16,7 @@ module.exports = {
 				type: Sequelize.FLOAT,
 			},
 			quantidade: {
-				type: Sequelize.INTEGER,
+				type: Sequelize.STRING,
 			},
 			status: {
 				type: Sequelize.ENUM(

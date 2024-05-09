@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: "livro_id",
 				onDelete: "CASCADE",
 			});
+			Livro.hasMany(models.LivroPedido, {
+				foreignKey: "livro_id",
+				onDelete: "CASCADE",
+			});
 		}
 	}
 	Livro.init(

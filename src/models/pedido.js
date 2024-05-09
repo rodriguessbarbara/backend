@@ -13,14 +13,17 @@ module.exports = (sequelize, DataTypes) => {
 				foreignKey: "pedido_id",
 				onDelete: "CASCADE",
 			});
+			Pedido.hasMany(models.LivroPedido, {
+				foreignKey: "pedido_id",
+				onDelete: "CASCADE",
+			});
 		}
 	}
 	Pedido.init(
 		{
-			tituloLivro: DataTypes.STRING,
 			formaPagamento: DataTypes.STRING,
 			valor: DataTypes.FLOAT,
-			quantidade: DataTypes.INTEGER,
+			quantidade: DataTypes.STRING,
 			status: {
 				type: DataTypes.ENUM(
 					"EM PROCESSAMENTO",

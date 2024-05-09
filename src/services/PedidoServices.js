@@ -19,6 +19,16 @@ class PedidoServices extends Services {
 					})
 				);
 			}
+			if (novoPedido.tituloLivros && novoPedido.tituloLivros.length > 0) {
+				await Promise.all(
+					novoPedido.tituloLivros.map(async (livro_id) => {
+						await data.LivroPedido.create({
+							pedido_id: pedidoCriado.id,
+							livro_id: livro_id,
+						});
+					})
+				);
+			}
 			return pedidoCriado;
 		} catch (err) {
 			throw new Error(`Erro ao criar o pedido: ${err.message}`);
@@ -50,6 +60,16 @@ class PedidoServices extends Services {
 							},
 						],
 					},
+					{
+						model: data.LivroPedido,
+						attributes: ["livro_id"],
+						include: [
+							{
+								model: data.Livro,
+								attributes: ["id", "titulo", "precificacao", "ativo"],
+							},
+						],
+					},
 				],
 			});
 			return pedidos;
@@ -77,6 +97,16 @@ class PedidoServices extends Services {
 									"cvv",
 									"preferencial",
 								],
+							},
+						],
+					},
+					{
+						model: data.LivroPedido,
+						attributes: ["livro_id"],
+						include: [
+							{
+								model: data.Livro,
+								attributes: ["id", "titulo", "precificacao", "ativo"],
 							},
 						],
 					},

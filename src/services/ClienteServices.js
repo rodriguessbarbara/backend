@@ -62,12 +62,13 @@ class ClienteServices extends Services {
 						model: data.Pedido,
 						attributes: [
 							"id",
-							"tituloLivro",
 							"formaPagamento",
 							"valor",
 							"quantidade",
 							"status",
 							"cupom_id",
+							"createdAt",
+							"updatedAt",
 						],
 					},
 				],
@@ -117,12 +118,13 @@ class ClienteServices extends Services {
 						model: data.Pedido,
 						attributes: [
 							"id",
-							"tituloLivro",
 							"formaPagamento",
 							"valor",
 							"quantidade",
 							"status",
 							"cupom_id",
+							"createdAt",
+							"updatedAt",
 						],
 						include: [
 							{
@@ -140,6 +142,16 @@ class ClienteServices extends Services {
 											"cvv",
 											"preferencial",
 										],
+									},
+								],
+							},
+							{
+								model: data.LivroPedido,
+								attributes: ["livro_id"],
+								include: [
+									{
+										model: data.Livro,
+										attributes: ["id", "titulo", "precificacao", "ativo"],
 									},
 								],
 							},
