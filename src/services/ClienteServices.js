@@ -151,7 +151,13 @@ class ClienteServices extends Services {
 								include: [
 									{
 										model: data.Livro,
-										attributes: ["id", "titulo", "precificacao", "ativo"],
+										attributes: [
+											"id",
+											"titulo",
+											"precificacao",
+											"quantidade",
+											"ativo",
+										],
 									},
 								],
 							},
