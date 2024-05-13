@@ -1,10 +1,15 @@
 const Services = require("./Services");
 const data = require("../models/index");
 
+const CupomServices = require("../services/CupomServices");
+const cupomServices = new CupomServices();
+
 class PedidoServices extends Services {
 	constructor() {
 		super("Pedido");
 	}
+
+	static pedidoTroca = [];
 
 	async createPedido(novoPedido) {
 		try {
@@ -245,10 +250,42 @@ class PedidoServices extends Services {
 		}
 	}
 
+	async solicitarTrocaItem(vendaId, dataPedido) {
+		try {
+			const pedido = await data.Pedido.findByPk(vendaId);
+			if (!pedido || pedido.status.toUpperCase() !== "ENTREGUE") {
+				throw new Error("Pedido não encontrado");
+			}
+
+			PedidoServices.pedidoTroca = dataPedido;
+			pedido.status = "EM TROCA";
+			await pedido.save();
+			return pedido;
+		} catch (error) {
+			throw new Error("Erro ao solicitar troca: " + error.message);
+		}
+	}
+
+	async solicitarCancelamento(vendaId) {
+		try {
+			const pedido = await data.Pedido.findByPk(vendaId);
+			pedido.status = "AGUARDANDO CANCELAMENTO";
+			await pedido.save();
+			return pedido;
+		} catch (error) {
+			throw new Error("Erro ao solicitar troca: " + error.message);
+		}
+	}
+
 	async enviarItens(vendaId) {
 		try {
 			const pedido = await data.Pedido.findByPk(vendaId);
-			if (!pedido || pedido.status.toUpperCase() !== "TROCA AUTORIZADA") {
+			console.log(pedido);
+			if (
+				!pedido ||
+				(pedido.status.toUpperCase() !== "TROCA AUTORIZADA" &&
+					pedido.status.toUpperCase() !== "AGUARDANDO CANCELAMENTO")
+			) {
 				throw new Error("Pedido não encontrado");
 			}
 			pedido.status = "ITENS ENVIADOS";
@@ -259,15 +296,29 @@ class PedidoServices extends Services {
 		}
 	}
 
-	async confirmarRecebimento(vendaId, cupomId) {
+	async confirmarRecebimento(vendaId, cupomData) {
 		try {
 			const pedido = await data.Pedido.findByPk(vendaId);
 			if (!pedido || pedido.status.toUpperCase() !== "ITENS ENVIADOS") {
 				throw new Error("Pedido não encontrado");
 			}
 
-			pedido.status = "TROCA FINALIZADA";
+			let geraCupomTroca;
+			console.log(PedidoServices.pedidoTroca);
+			if (PedidoServices.pedidoTroca.length) {
+				geraCupomTroca = await cupomServices.createRegistro({
+					nome: `TROCA${vendaId}`,
+					valor: 45,
+					tipo: "TROCA",
+					ativo: true,
+					cliente_id: PedidoServices.pedidoTroca.valorValeTroca,
+					pedido_id: vendaId,
+				});
+			} else {
+				geraCupomTroca = await cupomServices.createRegistro(cupomData);
+			}
 
+			pedido.status = "TROCA FINALIZADA";
 			await pedido.save();
 			return pedido;
 		} catch (error) {

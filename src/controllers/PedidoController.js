@@ -1,7 +1,9 @@
 const Controller = require("./Controller");
 const PedidoServices = require("../services/PedidoServices");
+const CupomServices = require("../services/CupomServices");
 
 const pedidoServices = new PedidoServices();
+const cupomServices = new CupomServices();
 
 class PedidoController extends Controller {
 	constructor() {
@@ -117,6 +119,30 @@ class PedidoController extends Controller {
 		}
 	}
 
+	async solicitarTrocaItem(request, response) {
+		const dataPedido = request.body;
+		try {
+			const vendaId = request.params.id;
+			const pedido = await pedidoServices.solicitarTrocaItem(
+				vendaId,
+				dataPedido
+			);
+			response.status(200).json(pedido);
+		} catch (error) {
+			response.status(500).json(error.message);
+		}
+	}
+
+	async solicitarCancelamento(request, response) {
+		try {
+			const vendaId = request.params.id;
+			const pedido = await pedidoServices.solicitarCancelamento(vendaId);
+			response.status(200).json(pedido);
+		} catch (error) {
+			response.status(500).json(error.message);
+		}
+	}
+
 	async enviarItens(request, response) {
 		try {
 			const vendaId = request.params.id;
@@ -130,12 +156,13 @@ class PedidoController extends Controller {
 	async confirmarRecebimento(request, response) {
 		try {
 			const vendaId = request.params.id;
-			const cupomId = request.body.id;
+			const cupomData = request.body;
 
 			const pedido = await pedidoServices.confirmarRecebimento(
 				vendaId,
-				cupomId
+				cupomData
 			);
+
 			response.status(200).json(pedido);
 		} catch (error) {
 			response.status(500).json(error.message);

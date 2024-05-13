@@ -40,9 +40,6 @@ router.patch("/pedidos/autorizar-troca/:id", (request, response) => {
 router.patch("/pedidos/recusar-troca/:id", (request, response) => {
 	pedidoController.recusarTroca(request, response);
 });
-router.patch("/pedidos/enviar-itens/:id", (request, response) => {
-	pedidoController.enviarItens(request, response);
-});
 router.patch("/pedidos/confirmar-recebimento/:id", (request, response) => {
 	pedidoController.confirmarRecebimento(request, response);
 });
@@ -50,6 +47,15 @@ router.patch("/pedidos/confirmar-recebimento/:id", (request, response) => {
 //STATUS VENDAS - USER
 router.patch("/pedidos/solicitar-troca/:id", (request, response) => {
 	pedidoController.solicitarTroca(request, response);
+});
+router.patch("/pedidos/solicitar-troca-item/:id", (request, response) => {
+	pedidoController.solicitarTrocaItem(request, response);
+});
+router.patch("/pedidos/enviar-itens/:id", (request, response) => {
+	pedidoController.enviarItens(request, response);
+});
+router.patch("/pedidos/solicitar-cancelamento/:id", (request, response) => {
+	pedidoController.solicitarCancelamento(request, response);
 });
 
 module.exports = router;

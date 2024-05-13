@@ -30,7 +30,8 @@ module.exports = {
 					"TROCA AUTORIZADA",
 					"TROCA RECUSADA",
 					"TROCA FINALIZADA",
-					"ITENS ENVIADOS"
+					"ITENS ENVIADOS",
+					"AGUARDANDO CANCELAMENTO"
 				),
 			},
 			cliente_id: {
