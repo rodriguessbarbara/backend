@@ -26,10 +26,10 @@ class CupomServices extends Services {
 		}
 	}
 
-	async getCuponsByPedidoId(pedidoId) {
+	async getCuponsByClienteId(clienteId) {
 		try {
 			const cupons = await data.Cupom.findAll({
-				where: { pedido_id: pedidoId },
+				where: { cliente_id: clienteId },
 			});
 			return cupons;
 		} catch (err) {

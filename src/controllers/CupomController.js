@@ -35,12 +35,11 @@ class CupomController extends Controller {
 		}
 	}
 
-	async findCuponsByPedidoId(request, response) {
-		const pedidoId = request.params.pedidoId;
-
+	async findCuponsByClienteId(request, response) {
+		const clienteId = request.params.clienteId;
 		try {
-			if (pedidoId && Number(pedidoId)) {
-				const resultado = await cupomServices.getCuponsByPedidoId(pedidoId);
+			if (clienteId && Number(clienteId)) {
+				const resultado = await cupomServices.getCuponsByClienteId(clienteId);
 				return response.status(201).json(resultado);
 			} else {
 				response.status(422);

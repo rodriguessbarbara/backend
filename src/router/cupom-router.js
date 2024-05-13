@@ -25,8 +25,8 @@ router.post("/cupom/validar", (request, response) => {
 });
 
 //CUPOM VIA PEDIDO_ID
-router.get("/cupom/:pedidoId", (request, response) => {
-	cupomController.findCuponsByPedidoId(request, response);
+router.get("/cupom/:clienteId", (request, response) => {
+	cupomController.findCuponsByClienteId(request, response);
 });
 
 module.exports = router;
