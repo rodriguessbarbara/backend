@@ -10,6 +10,7 @@ class PedidoServices extends Services {
 	}
 
 	static pedidoTroca = [];
+	static tipoTroca = {};
 
 	async createPedido(novoPedido) {
 		try {
@@ -43,9 +44,7 @@ class PedidoServices extends Services {
 	async getPedidosById(id) {
 		try {
 			const pedidos = await data.Pedido.findOne({
-				where: {
-					id: id,
-				},
+				where: { id: id },
 				include: [
 					{
 						model: data.Cartao_Pedido,
@@ -165,21 +164,6 @@ class PedidoServices extends Services {
 		}
 	}
 
-	async cancelarPedido(vendaId) {
-		try {
-			const pedido = await data.Pedido.findByPk(vendaId);
-			if (!pedido) {
-				throw new Error("Pedido não encontrado");
-			}
-			pedido.status = "PEDIDO CANCELADO";
-
-			await pedido.save();
-			return pedido;
-		} catch (error) {
-			throw new Error("Erro ao cancelar pedido: " + error.message);
-		}
-	}
-
 	async despacharProdutos(vendaId) {
 		try {
 			const pedido = await data.Pedido.findByPk(vendaId);
@@ -280,7 +264,6 @@ class PedidoServices extends Services {
 	async enviarItens(vendaId) {
 		try {
 			const pedido = await data.Pedido.findByPk(vendaId);
-			console.log(pedido);
 			if (
 				!pedido ||
 				(pedido.status.toUpperCase() !== "TROCA AUTORIZADA" &&
@@ -288,6 +271,19 @@ class PedidoServices extends Services {
 			) {
 				throw new Error("Pedido não encontrado");
 			}
+
+			if (pedido.status.toUpperCase() === "TROCA AUTORIZADA") {
+				PedidoServices.tipoTroca[vendaId] = {
+					status: "troca",
+					timestamp: new Date(),
+				};
+			} else if (pedido.status.toUpperCase() === "AGUARDANDO CANCELAMENTO") {
+				PedidoServices.tipoTroca[vendaId] = {
+					status: "cancelamento",
+					timestamp: new Date(),
+				};
+			}
+
 			pedido.status = "ITENS ENVIADOS";
 			await pedido.save();
 			return pedido;
@@ -303,26 +299,40 @@ class PedidoServices extends Services {
 				throw new Error("Pedido não encontrado");
 			}
 
-			let geraCupomTroca;
-			console.log(PedidoServices.pedidoTroca);
-			if (PedidoServices.pedidoTroca.length) {
-				geraCupomTroca = await cupomServices.createRegistro({
-					nome: `TROCA${vendaId}`,
-					valor: 45,
-					tipo: "TROCA",
-					ativo: true,
-					cliente_id: PedidoServices.pedidoTroca.valorValeTroca,
-					pedido_id: vendaId,
-				});
+			await cupomServices.createRegistro(cupomData);
+
+			const tipo = PedidoServices.tipoTroca[vendaId];
+			if (tipo) {
+				if (tipo.status === "troca") {
+					pedido.status = "TROCA FINALIZADA";
+				} else if (tipo.status === "cancelamento") {
+					pedido.status = "PEDIDO CANCELADO";
+				}
 			} else {
-				geraCupomTroca = await cupomServices.createRegistro(cupomData);
+				pedido.status = "TROCA FINALIZADA";
 			}
 
-			pedido.status = "TROCA FINALIZADA";
 			await pedido.save();
 			return pedido;
 		} catch (error) {
-			throw new Error("Erro ao solicitar troca: " + error.message);
+			throw new Error(
+				"Erro ao confirmar recebimento do pedido: " + error.message
+			);
+		}
+	}
+
+	async cancelarPedido(vendaId) {
+		try {
+			const pedido = await data.Pedido.findByPk(vendaId);
+			if (!pedido) {
+				throw new Error("Pedido não encontrado");
+			}
+			pedido.status = "PEDIDO CANCELADO";
+
+			await pedido.save();
+			return pedido;
+		} catch (error) {
+			throw new Error("Erro ao cancelar pedido: " + error.message);
 		}
 	}
 }
