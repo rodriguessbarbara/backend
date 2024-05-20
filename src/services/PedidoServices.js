@@ -1,26 +1,32 @@
 const Services = require("./Services");
 const data = require("../models/index");
-
 const CupomServices = require("../services/CupomServices");
+const LivroServices = require("./LivroServices");
+
 const cupomServices = new CupomServices();
+const livroServices = new LivroServices();
 
 class PedidoServices extends Services {
 	constructor() {
 		super("Pedido");
 	}
 
-	static pedidoTroca = [];
+	static pedidoTroca = {};
 	static tipoTroca = {};
 
 	async createPedido(novoPedido) {
 		try {
 			const pedidoCriado = await data.Pedido.create(novoPedido);
+
 			if (novoPedido.cartoes && novoPedido.cartoes.length > 0) {
 				await Promise.all(
-					novoPedido.cartoes.map(async (cartao_id) => {
+					novoPedido.cartoes.map(async (cartao_id, index) => {
 						await data.Cartao_Pedido.create({
 							pedido_id: pedidoCriado.id,
 							cartao_id: cartao_id,
+							valor: novoPedido.valorCartao.length
+								? novoPedido.valorCartao[index]
+								: novoPedido.valor,
 						});
 					})
 				);
@@ -199,6 +205,7 @@ class PedidoServices extends Services {
 				throw new Error("Pedido não encontrado ou não está em troca");
 			}
 			pedido.status = "TROCA AUTORIZADA";
+
 			await pedido.save();
 			return pedido;
 		} catch (error) {
@@ -241,7 +248,7 @@ class PedidoServices extends Services {
 				throw new Error("Pedido não encontrado");
 			}
 
-			PedidoServices.pedidoTroca = dataPedido;
+			PedidoServices.pedidoTroca[vendaId] = dataPedido;
 			pedido.status = "EM TROCA";
 			await pedido.save();
 			return pedido;
@@ -299,7 +306,18 @@ class PedidoServices extends Services {
 				throw new Error("Pedido não encontrado");
 			}
 
-			await cupomServices.createRegistro(cupomData);
+			if (PedidoServices.pedidoTroca[vendaId]) {
+				await cupomServices.createRegistro({
+					nome: `TROCA${vendaId}`,
+					valor: PedidoServices.pedidoTroca[vendaId].valorValeTroca,
+					tipo: "TROCA",
+					ativo: true,
+					cliente_id: cupomData.cliente_id,
+					pedido_id: vendaId,
+				});
+			} else {
+				await cupomServices.createRegistro(cupomData);
+			}
 
 			const tipo = PedidoServices.tipoTroca[vendaId];
 			if (tipo) {
@@ -333,6 +351,51 @@ class PedidoServices extends Services {
 			return pedido;
 		} catch (error) {
 			throw new Error("Erro ao cancelar pedido: " + error.message);
+		}
+	}
+
+	async retornarEstoque(venda, vendaId) {
+		try {
+			const pedido = await data.Pedido.findByPk(vendaId);
+			if (!pedido) {
+				throw new Error("Pedido não encontrado");
+			}
+
+			if (PedidoServices.pedidoTroca[vendaId]) {
+				PedidoServices.pedidoTroca[vendaId].livrosId.map(
+					async (livroId, index) => {
+						const livroIndex = venda.livroId.indexOf(livroId);
+						if (livroIndex !== -1) {
+							await livroServices.updateRegistro(
+								{
+									quantidade:
+										Number(venda.livroEstoque[livroIndex]) +
+										Number(
+											PedidoServices.pedidoTroca[vendaId].quantidadeTroca[index]
+										),
+								},
+								livroId
+							);
+						}
+					}
+				);
+			} else {
+				venda.livroId.map(async (livroId, index) => {
+					await livroServices.updateRegistro(
+						{
+							quantidade:
+								Number(venda.livroEstoque[index]) +
+								Number(venda.quantidade.split(",")[index]),
+						},
+						livroId
+					);
+				});
+			}
+			return pedido;
+		} catch (error) {
+			throw new Error(
+				"Erro ao retornar quantidade ao estoque de livros: " + error.message
+			);
 		}
 	}
 }

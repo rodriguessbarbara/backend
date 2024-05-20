@@ -17,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			cartao_id: DataTypes.BIGINT,
 			pedido_id: DataTypes.BIGINT,
+			valor: DataTypes.FLOAT,
 		},
 		{
 			sequelize,

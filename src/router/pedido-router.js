@@ -43,6 +43,9 @@ router.patch("/pedidos/recusar-troca/:id", (request, response) => {
 router.patch("/pedidos/confirmar-recebimento/:id", (request, response) => {
 	pedidoController.confirmarRecebimento(request, response);
 });
+router.patch("/pedidos/retornar-estoque/:id", (request, response) => {
+	pedidoController.retornarEstoque(request, response);
+});
 
 //STATUS VENDAS - USER
 router.patch("/pedidos/solicitar-troca/:id", (request, response) => {

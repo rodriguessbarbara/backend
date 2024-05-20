@@ -168,6 +168,18 @@ class PedidoController extends Controller {
 			response.status(500).json(error.message);
 		}
 	}
+
+	async retornarEstoque(request, response) {
+		try {
+			const vendaId = request.params.id;
+			const venda = request.body;
+
+			const pedido = await pedidoServices.retornarEstoque(venda, vendaId);
+			response.status(200).json(pedido);
+		} catch (error) {
+			response.status(500).json(error.message);
+		}
+	}
 }
 
 module.exports = PedidoController;

@@ -21,6 +21,10 @@ module.exports = {
 				references: { model: "pedidos", key: "id" },
 				onDelete: "CASCADE",
 			},
+			valor: {
+				allowNull: false,
+				type: Sequelize.FLOAT,
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,
