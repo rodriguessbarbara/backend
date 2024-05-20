@@ -71,7 +71,17 @@ class LivroServices extends Services {
 				],
 			});
 
-			return livros;
+			const livrosAtualizados = await Promise.all(
+				livros.map(async (livro) => {
+					if (livro.quantidade <= 0 && livro.ativo) {
+						await livroServices.updateRegistro({ ativo: false }, livro.id);
+						livro.ativo = false;
+					}
+					return livro;
+				})
+			);
+
+			return livrosAtualizados;
 		} catch (err) {
 			throw new Error(`Erro ao buscar livros: ${err.message}`);
 		}
@@ -240,5 +250,7 @@ class LivroServices extends Services {
 		}
 	}
 }
+
+const livroServices = new LivroServices();
 
 module.exports = LivroServices;
