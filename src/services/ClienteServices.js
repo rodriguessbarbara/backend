@@ -1,29 +1,89 @@
 const Services = require("./Services");
 const data = require("../models/index");
+const { hash } = require("bcryptjs");
+const { compare } = require("bcryptjs");
+const { sign } = require("jsonwebtoken");
+const jsonSecret = require("../config/json-secret");
 
 class ClienteServices extends Services {
 	constructor() {
 		super("Cliente");
 	}
 
-	async verificaCliente(email, senha) {
+	async createCliente(dataCliente) {
 		try {
-			const resultado = await data.Cliente.findOne({
+			const cliente = await data.Cliente.findOne({
 				where: {
-					email: email,
-					senha: senha,
+					email: dataCliente.email,
 				},
 			});
 
-			if (resultado && resultado.ativo) {
-				return resultado.id;
-			} else if (!resultado) {
-				throw new Error("Usuário e/ou senha incorreto");
-			} else {
-				throw new Error("Sua conta está inativa");
+			if (cliente) {
+				throw new Error("usuário já cadastrado!");
 			}
+
+			const senhaHash = await hash(dataCliente.senha, 8);
+			const novoCliente = await data.Cliente.create({
+				nome: dataCliente.nome,
+				cpf: dataCliente.cpf,
+				email: dataCliente.email,
+				senha: senhaHash,
+				genero: dataCliente.genero,
+				telefone: dataCliente.telefone,
+				dataNascimento: dataCliente.dataNascimento,
+				ativo: dataCliente.ativo,
+				role: dataCliente.role,
+			});
+
+			return novoCliente;
 		} catch (err) {
-			throw new Error(err);
+			throw new Error(`Erro ao cadastrar o cliente: ${err.message}`);
+		}
+	}
+
+	async login(email, senha) {
+		try {
+			const cliente = await data.Cliente.findOne({
+				attributes: [
+					"id",
+					"nome",
+					"cpf",
+					"email",
+					"senha",
+					"genero",
+					"telefone",
+					"dataNascimento",
+					"ativo",
+					"role",
+				],
+				where: {
+					email: email,
+				},
+			});
+
+			if (!cliente) {
+				throw new Error("usuário não existe!");
+			}
+
+			const isSenhaIguais = await compare(senha, cliente.senha);
+			if (!isSenhaIguais) {
+				throw new Error("Usuário e/ou senha incorreto");
+			} else if (isSenhaIguais && !cliente.ativo) {
+				throw new Error("conta está inativa");
+			}
+
+			const accessToken = sign(
+				{
+					id: cliente.id,
+					email: cliente.email,
+				},
+				jsonSecret.secret,
+				{ expiresIn: 86400 }
+			);
+
+			return accessToken;
+		} catch (err) {
+			throw new Error(err.message);
 		}
 	}
 
@@ -170,6 +230,38 @@ class ClienteServices extends Services {
 			throw new Error(`Erro ao buscar cliente: ${err.message}`);
 		}
 	}
+
+	async atualizaSenhaCliente(id, senha) {
+		try {
+			const cliente = await data.Cliente.findOne({
+				attributes: ["senha"],
+				where: {
+					id: id,
+				},
+			});
+
+			const isSenhaIguais = await compare(senha, cliente.senha);
+			if (isSenhaIguais) {
+				throw new Error("a nova senha não pode ser igual a anterior");
+			}
+
+			const novaSenhaHash = await hash(senha, 8);
+			const novaSenha = data.Cliente.update(
+				{ senha: novaSenhaHash },
+				{
+					where: { id: id },
+				}
+			);
+
+			await clienteServices.updateRegistro({ senha: novaSenhaHash }, id);
+
+			return novaSenha;
+		} catch (err) {
+			throw new Error(err.message);
+		}
+	}
 }
+
+const clienteServices = new ClienteServices();
 
 module.exports = ClienteServices;
