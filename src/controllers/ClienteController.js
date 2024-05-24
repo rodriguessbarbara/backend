@@ -3,6 +3,10 @@ const ClienteServices = require("../services/ClienteServices");
 
 const clienteServices = new ClienteServices();
 
+function validarSenha(senha) {
+	const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+	return regex.test(senha);
+}
 class ClienteController extends Controller {
 	constructor() {
 		super(clienteServices);
@@ -11,6 +15,16 @@ class ClienteController extends Controller {
 	async criarCliente(request, response) {
 		try {
 			const novoCliente = request.body;
+			const senha = request.body.senha;
+
+			if (!validarSenha(senha)) {
+				return response
+					.status(400)
+					.json(
+						"A senha não atende aos requisitos:\n conter ao menos 8 caracteres, ter letra maiúscula, minúscula, número e carácter especial."
+					);
+			}
+
 			const clienteCriado = await clienteServices.createCliente(novoCliente);
 			response.status(201).json(clienteCriado);
 		} catch (error) {
@@ -30,6 +44,16 @@ class ClienteController extends Controller {
 			response.status(201).json(loginResposta);
 		} catch (error) {
 			response.status(400).json(error.message);
+		}
+	}
+
+	async validarToken(request, response) {
+		try {
+			const token = request.headers.authorization;
+			const userData = await clienteServices.validateToken(token);
+			response.status(200).json(userData);
+		} catch (err) {
+			response.status(401).json(err.message);
 		}
 	}
 
@@ -77,6 +101,14 @@ class ClienteController extends Controller {
 		const id = request.params.id;
 
 		try {
+			if (!validarSenha(novaSenha.senha)) {
+				return response
+					.status(400)
+					.json(
+						"A senha não atende aos requisitos: \n conter ao menos 8 caracteres, ter letra maiúscula, minúscula, número e carácter especial."
+					);
+			}
+
 			const resultado = await clienteServices.atualizaSenhaCliente(
 				id,
 				novaSenha.senha

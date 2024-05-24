@@ -9,6 +9,9 @@ const usuarioRouter = new Router();
 usuarioRouter.post("/clientes/auth/login", (request, response) => {
 	clienteController.login(request, response);
 });
+usuarioRouter.get("/validate-token", (request, response) => {
+	clienteController.validarToken(request, response);
+});
 usuarioRouter.post("/clientes", (request, response) => {
 	clienteController.criarCliente(request, response);
 });

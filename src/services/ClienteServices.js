@@ -2,7 +2,7 @@ const Services = require("./Services");
 const data = require("../models/index");
 const { hash } = require("bcryptjs");
 const { compare } = require("bcryptjs");
-const { sign } = require("jsonwebtoken");
+const { sign, verify } = require("jsonwebtoken");
 const jsonSecret = require("../config/json-secret");
 
 class ClienteServices extends Services {
@@ -37,7 +37,7 @@ class ClienteServices extends Services {
 
 			return novoCliente;
 		} catch (err) {
-			throw new Error(`Erro ao cadastrar o cliente: ${err.message}`);
+			throw new Error(`Erro ao criar conta: ${err.message}`);
 		}
 	}
 
@@ -84,6 +84,19 @@ class ClienteServices extends Services {
 			return accessToken;
 		} catch (err) {
 			throw new Error(err.message);
+		}
+	}
+
+	async validateToken(token) {
+		if (!token) throw new Error("Token não fornecido");
+
+		try {
+			const decoded = verify(token, jsonSecret.secret);
+			const user = await data.Cliente.findByPk(decoded.id);
+			if (!user) throw new Error("Usuário não encontrado");
+			return user;
+		} catch (error) {
+			throw new Error("Token inválido");
 		}
 	}
 
