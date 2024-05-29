@@ -16,7 +16,7 @@ module.exports = {
 				type: Sequelize.STRING,
 			},
 			tipoResidencia: {
-				type: Sequelize.ENUM("Casa", "Apartamento", "Comercial"),
+				type: Sequelize.ENUM("CASA", "APARTAMENTO", "COMERCIAL"),
 			},
 			num: {
 				type: Sequelize.STRING,

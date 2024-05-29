@@ -4,6 +4,7 @@ const { hash } = require("bcryptjs");
 const { compare } = require("bcryptjs");
 const { sign, verify } = require("jsonwebtoken");
 const jsonSecret = require("../config/json-secret");
+const { Op, fn, col, where } = require("sequelize");
 
 class ClienteServices extends Services {
 	constructor() {
@@ -241,6 +242,42 @@ class ClienteServices extends Services {
 			return cliente;
 		} catch (err) {
 			throw new Error(`Erro ao buscar cliente: ${err.message}`);
+		}
+	}
+
+	async getClienteByNome(nome) {
+		try {
+			const whereClause = {
+				[Op.and]: [
+					where(fn("UPPER", col("nome")), {
+						[Op.like]: `%${nome}%`,
+					}),
+				],
+			};
+
+			const clientes = await data.Cliente.findAll({
+				where: whereClause,
+				include: [
+					{
+						model: data.Endereco,
+						attributes: [
+							"id",
+							"lagradouro",
+							"enderecoResidencial",
+							"tipoResidencia",
+							"num",
+							"CEP",
+							"bairro",
+							"cidade",
+							"estado",
+							"pais",
+						],
+					},
+				],
+			});
+			return clientes;
+		} catch (err) {
+			throw new Error(`Erro ao buscar o cliente pelo nome: ${err.message}`);
 		}
 	}
 

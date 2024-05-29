@@ -1,5 +1,6 @@
 const Controller = require("./Controller");
 const ClienteServices = require("../services/ClienteServices");
+const unidecode = require("unidecode");
 
 const clienteServices = new ClienteServices();
 
@@ -91,6 +92,19 @@ class ClienteController extends Controller {
 				return response.status(404).send("Nenhum cliente encontrado.");
 			}
 			return response.status(200).json(clientes);
+		} catch (err) {
+			return response.status(500).json(err.message);
+		}
+	}
+
+	async findClienteByNome(request, response) {
+		try {
+			const nome = unidecode(request.params.nome.toUpperCase());
+			const clientes = await clienteServices.getClienteByNome(nome);
+			if (!clientes.length) {
+				return response.status(404).send("Nenhum cliente encontrado.");
+			}
+			return response.status(201).json(clientes);
 		} catch (err) {
 			return response.status(500).json(err.message);
 		}

@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 		{
 			lagradouro: DataTypes.STRING,
 			enderecoResidencial: DataTypes.STRING,
-			tipoResidencia: DataTypes.ENUM("Casa", "Apartamento", "Comercial"),
+			tipoResidencia: DataTypes.ENUM("CASA", "APARTAMENTO", "COMERCIAL"),
 			num: DataTypes.STRING,
 			CEP: DataTypes.STRING,
 			bairro: DataTypes.STRING,

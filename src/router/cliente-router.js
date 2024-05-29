@@ -18,6 +18,9 @@ usuarioRouter.post("/clientes", (request, response) => {
 usuarioRouter.get("/clientes", (request, response) => {
 	clienteController.findTudoCliente(request, response);
 });
+usuarioRouter.get("/clientes/nome/:nome", (request, response) => {
+	clienteController.findClienteByNome(request, response);
+});
 
 usuarioRouter.use(autenticado);
 
