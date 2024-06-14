@@ -8,7 +8,10 @@ class GraficoServices extends Services {
 			const pedidos = await data.Pedido.findAll({
 				where: {
 					createdAt: {
-						[Op.between]: [startDate, endDate],
+						[Op.between]: [
+							`${startDate} 00:00:00.000 +00:00`,
+							`${endDate} 21:00:00.000 +00:00`,
+						],
 					},
 				},
 				include: [
