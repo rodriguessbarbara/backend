@@ -12,6 +12,13 @@ class LivroController extends Controller {
 	async criarLivro(request, response) {
 		try {
 			const novoLivro = request.body;
+			if (novoLivro.palavraChave) {
+				const imgCapaAlternativa = await livroServices.generateImage(
+					novoLivro.palavraChave
+				);
+				novoLivro.capaAlternativa = imgCapaAlternativa;
+			}
+
 			const livroCriado = await livroServices.createLivro(novoLivro);
 			response.status(201).json(livroCriado);
 		} catch (error) {

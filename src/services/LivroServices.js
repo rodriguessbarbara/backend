@@ -1,16 +1,75 @@
 const { Op } = require("sequelize");
 const Services = require("./Services");
 const data = require("../models/index");
+const dotenv = require("dotenv");
+const OpenAI = require("openai");
+const fs = require("fs");
+const path = require("path");
+const axios = require("axios");
+const os = require("os");
+
+dotenv.config();
+const openai = new OpenAI({
+	apiKey: "sk-proj-BSM8wFc859uXn5DLGoYET3BlbkFJ4hK2ub51CfceXmoVrrV6",
+});
+
+// const geraImg = async (prompt) => {
+// 	const response = await openai.images.generate({
+// 		model: "dall-e-3",
+// 		prompt: prompt,
+// 		size: "1024x1024",
+// 		quality: "standard",
+// 		n: 1,
+// 	});
+
+// 	console.log(response.data[0].url);
+// 	return response.data[0].url;
+// };
+// const urlImg = geraImg(
+// 	"Uma pintura a óleo expressiva e 3d de: triangulo amoroso, prostituta, poetico, delicado, rio, intesidade, casal"
+// );
 
 class LivroServices extends Services {
 	constructor() {
 		super("Livro");
 	}
 
+	async generateImage(prompt) {
+		try {
+			const response = await openai.images.generate({
+				model: "dall-e-3",
+				prompt: `Uma pintura a óleo expressiva e 3d de: ${prompt}`,
+				size: "1024x1024",
+				n: 1,
+				quality: "standard",
+			});
+
+			const url = response.data[0].url;
+			const fileName = `${prompt.replace(/ /g, "_")}.png`;
+			const imagePath = path.join(__dirname, "..", "..", "public", "images");
+			const localImagePath = path.join(imagePath, fileName);
+
+			await this.downloadImage(url, localImagePath);
+			return `/images/${fileName}`;
+		} catch (error) {
+			throw new Error(`Erro ao gerar a imagem: ${error.message}`);
+		}
+	}
+
+	async downloadImage(url, caminhoDestino) {
+		const response = await axios.get(url, { responseType: "stream" });
+		response.data.pipe(fs.createWriteStream(caminhoDestino));
+
+		return new Promise((resolve, reject) => {
+			response.data.on("end", resolve);
+			response.data.on("error", reject);
+		});
+	}
+
 	async createLivro(novoLivro) {
 		try {
 			const livroCriado = await data.Livro.create(novoLivro);
-			console.log(novoLivro);
+
 			if (novoLivro.categorias && novoLivro.categorias.length > 0) {
 				await Promise.all(
 					novoLivro.categorias.map(async (categoria_id) => {

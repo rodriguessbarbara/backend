@@ -1,5 +1,4 @@
 const express = require("express");
-const rotaClientes = require("./cliente-router");
 const rotaLivros = require("./livro-router");
 const rotaEnderecos = require("./endereco-router");
 const rotaCartoes = require("./cartao-router");
@@ -7,6 +6,7 @@ const rotaCupom = require("./cupom-router");
 const rotaPedidos = require("./pedido-router");
 const rotaCategorias = require("./categoria-router");
 const rotaGrafico = require("./grafico-router");
+const rotaClientes = require("./cliente-router");
 
 module.exports = (app) => {
 	app.use(express.json(), rotaLivros);
